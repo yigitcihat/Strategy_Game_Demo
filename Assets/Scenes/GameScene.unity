@@ -488,9 +488,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 097239a63907a58439b6a9542b12996e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemSpacing: 100
+  itemSpacing: 10
   horizontalMargin: 0
-  verticalMargin: 100
+  verticalMargin: 10
   horizontal: 0
   vertical: 1
 --- !u!1 &375804888
@@ -3393,7 +3393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollContent: {fileID: 361603302}
-  outOfBoundsThreshold: 0
+  outOfBoundsThreshold: 40
 --- !u!1 &2006154428
 GameObject:
   m_ObjectHideFlags: 0
