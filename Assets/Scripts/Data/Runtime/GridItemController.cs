@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public interface IProductionController
 {
     Action<IProductionItem> onItemHovered { get; set; }
+    Action<IProductionItem> onItemPicked { get; set; }
     Action<IProductionItem> onItemPickedUp { get; set; }
     Action<IProductionItem> onItemAdded { get; set; }
     Action<IProductionItem> onItemSwapped { get; set; }
@@ -23,6 +24,7 @@ public class GridItemController : MonoBehaviour,
     IEndDragHandler, IPointerExitHandler, IPointerEnterHandler,
     IProductionController
 {
+    private bool _isReturnOrSwap;
     // The dragged item is static and shared by all controllers
     // This way items can be moved between controllers easily
     private static ProductionDraggedItem _draggedItem;
@@ -30,6 +32,7 @@ public class GridItemController : MonoBehaviour,
     /// <inheritdoc />
     public Action<IProductionItem> onItemHovered { get; set; }
 
+    public Action<IProductionItem> onItemPicked { get; set; }
     /// <inheritdoc />
     public Action<IProductionItem> onItemPickedUp { get; set; }
 
@@ -52,7 +55,7 @@ public class GridItemController : MonoBehaviour,
     private IProductionItem _itemToDrag;
     private PointerEventData _currentEventData;
     private IProductionItem _lastHoveredItem;
-
+    private IProductionItem _simulationHoveredItem;
     /*
      * Setup
      */
@@ -76,7 +79,11 @@ public class GridItemController : MonoBehaviour,
         // Get which item to drag (item will be null of none were found)
         var grid = ScreenToGrid(eventData.position);
         _itemToDrag = inventory.GetAtPoint(grid);
-    }
+        inventory.TryAdd(inventory.GetAtPoint(grid));
+        onItemPicked?.Invoke(_itemToDrag);
+
+
+}
 
     /*
      * Dragging started (IBeginDragHandler)
@@ -85,7 +92,7 @@ public class GridItemController : MonoBehaviour,
     {
         inventoryRenderer.ClearSelection();
 
-        if (_itemToDrag == null || _draggedItem != null) return;
+        if (_itemToDrag == null || _draggedItem != null || !_itemToDrag.canDrop) return;
 
         var localPosition = ScreenToLocalPositionInRenderer(eventData.position);
         var itemOffest = inventoryRenderer.GetItemOffset(_itemToDrag);
@@ -99,10 +106,11 @@ public class GridItemController : MonoBehaviour,
             _itemToDrag,
             offset
         );
-
         // Remove the item from inventory
+       
+        
         inventory.TryRemove(_itemToDrag);
-
+       
         onItemPickedUp?.Invoke(_itemToDrag);
     }
 
@@ -132,19 +140,47 @@ public class GridItemController : MonoBehaviour,
         {
             case ProductionDraggedItem.DropMode.Added:
                 onItemAdded?.Invoke(_itemToDrag);
+                Debug.Log("New Production created");
+                GetComponent<SizeGridCreator>().CreateGridAndItems();
+                _isReturnOrSwap = false;
+                break;
+            case ProductionDraggedItem.DropMode.Selected:
+                onItemPicked?.Invoke(_itemToDrag);
+                _isReturnOrSwap = false;
                 break;
             case ProductionDraggedItem.DropMode.Swapped:
                 onItemSwapped?.Invoke(_itemToDrag);
+                _isReturnOrSwap = true;
                 break;
             case ProductionDraggedItem.DropMode.Returned:
                 onItemReturned?.Invoke(_itemToDrag);
+                _isReturnOrSwap = true;
                 break;
             case ProductionDraggedItem.DropMode.Dropped:
                 onItemDropped?.Invoke(_itemToDrag);
+               
+                _draggedItem.item.canDrop = false;
+                _isReturnOrSwap = false;
                 ClearHoveredItem();
                 break;
         }
-
+        if (!_isReturnOrSwap)
+        {
+            if (_draggedItem != null)
+            {
+                _draggedItem.item.canDrop = false;
+            }
+            
+           
+        }
+        else
+        {
+            if (_draggedItem != null)
+            {
+                _draggedItem.item.canDrop = true;
+            }
+            _isReturnOrSwap = false;
+        }
         _draggedItem = null;
     }
 
@@ -156,6 +192,7 @@ public class GridItemController : MonoBehaviour,
         if (_draggedItem != null)
         {
             // Clear the item as it leaves its current controller
+            
             _draggedItem.currentController = null;
             inventoryRenderer.ClearSelection();
         }

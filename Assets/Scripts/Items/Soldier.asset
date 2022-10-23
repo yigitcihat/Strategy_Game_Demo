@@ -19,4 +19,7 @@ MonoBehaviour:
     _shape: 01
   _type: 2
   _canDrop: 1
+  _canProduce: 0
+  _defination: 
+  _itemDefination: {fileID: 0}
   _position: {x: 0, y: 0}

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class ProductionDraggedItem
 {
     public enum DropMode
     {
         Added,
+        Selected,
         Swapped,
         Returned,
         Dropped,
@@ -72,7 +74,7 @@ public class ProductionDraggedItem
         _image.transform.SetAsLastSibling();
         _image.transform.localScale = Vector3.one;
         _image.sprite = item.sprite;
-        _image.SetNativeSize();
+        //_image.SetNativeSize();
     }
 
     /// <summary>
@@ -117,6 +119,7 @@ public class ProductionDraggedItem
                 currentController.inventory.TryAddAt(item, grid); // Place the item in a new location
                 mode = DropMode.Added;
             }
+           
             // Adding did not work, try to swap
             else if (CanSwap())
             {
@@ -130,6 +133,7 @@ public class ProductionDraggedItem
             else
             {
                 originalController.inventory.TryAddAt(item, originPoint); // Return the item to its previous location
+                item.canDrop = true;
                 mode = DropMode.Returned;
 
             }
@@ -168,6 +172,7 @@ public class ProductionDraggedItem
     /* 
      * Returns true if its possible to swap
      */
+   
     private bool CanSwap()
     {
         if (!currentController.inventory.CanSwap(item)) return false;

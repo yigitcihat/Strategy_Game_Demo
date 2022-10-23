@@ -15,12 +15,12 @@ public interface IProductionItem
     /// <summary>
     /// The width of this item
     /// </summary>
-    int width { get; }
+    int width { get;}
 
     /// <summary>
     /// The height of this item
     /// </summary>
-    int height { get; }
+    int height { get;}
 
     /// <summary>
     /// Returns true if given local position is part 
@@ -31,7 +31,9 @@ public interface IProductionItem
     /// <summary>
     /// Returns true if this item can be dropped on the ground
     /// </summary>
-    bool canDrop { get; }
+    public bool canDrop { get; set; }
+
+    public ItemDefinition itemDefination { get; set; }
 }
 
 internal static class ProductionItemExtensions

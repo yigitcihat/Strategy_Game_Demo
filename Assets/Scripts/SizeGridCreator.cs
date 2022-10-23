@@ -16,6 +16,11 @@ public class SizeGridCreator : MonoBehaviour
 
     void Start()
     {
+        CreateGridAndItems();
+    }
+   
+    public void CreateGridAndItems()
+    {
         var provider = new GridProvider(_renderMode, _maximumAlowedItemCount, _allowedItem);
 
         // Create inventory
@@ -26,8 +31,9 @@ public class SizeGridCreator : MonoBehaviour
         {
             var tries = (_width * _height) / 3;
             for (var i = 0; i < tries; i++)
-            {
-                inventory.TryAdd(_definitions[Random.Range(0, _definitions.Length)].CreateInstance());
+            { int random = Random.Range(0, _definitions.Length);
+                inventory.TryAdd(_definitions[random].CreateInstance());
+                _definitions[random].itemDefination = _definitions[random];
             }
         }
 
@@ -46,6 +52,7 @@ public class SizeGridCreator : MonoBehaviour
         // Log items being dropped on the ground
         inventory.onItemDropped += (item) =>
         {
+            GetComponent<GridRenderer>().SetInventory(inventory, provider.gridRenderMode);
             Debug.Log((item as ItemDefinition).Name + " was dropped on the ground");
         };
 
@@ -53,6 +60,7 @@ public class SizeGridCreator : MonoBehaviour
         inventory.onItemDroppedFailed += (item) =>
         {
             Debug.Log($"You're not allowed to drop {(item as ItemDefinition).Name} on the ground");
+           
         };
 
         // Log when an item was unable to be placed on the ground (due to its canDrop being set to false)

@@ -7,9 +7,13 @@
 public class ItemDefinition : ScriptableObject, IProductionItem
 {
     [SerializeField] private Sprite _sprite = null;
+    [SerializeField] private Sprite _productionSprite = null;
     [SerializeField] private GridShape _shape = null;
-    [SerializeField] private ItemType _type = ItemType.Unit;
+    [SerializeField] private ItemType _type = ItemType.Unit;  
     [SerializeField] private bool _canDrop = true;
+    [SerializeField] private bool _canProduce = true;
+    [SerializeField] private string _defination;
+    [SerializeField] private ItemDefinition _itemDefination;
     [SerializeField, HideInInspector] private Vector2Int _position = Vector2Int.zero;
 
     /// <summary>
@@ -17,6 +21,7 @@ public class ItemDefinition : ScriptableObject, IProductionItem
     /// </summary>
     public string Name => this.name;
 
+    public string Defination => _defination;
     /// <summary>
     /// The type of the item
     /// </summary>
@@ -25,11 +30,20 @@ public class ItemDefinition : ScriptableObject, IProductionItem
     /// <inheritdoc />
     public Sprite sprite => _sprite;
 
-    /// <inheritdoc />
-    public int width => _shape.width;
+    public Sprite productionSprite => _productionSprite;
 
     /// <inheritdoc />
-    public int height => _shape.height;
+    public int width
+    {
+        get => _shape.width;
+    }
+    /// <inheritdoc />
+    public int height
+    { 
+        get => _shape.height;
+    }
+    
+
 
     /// <inheritdoc />
     public Vector2Int position
@@ -45,7 +59,11 @@ public class ItemDefinition : ScriptableObject, IProductionItem
     }
 
     /// <inheritdoc />
-    public bool canDrop => _canDrop;
+    public bool canDrop { get => _canDrop; set => _canDrop = value; }
+    public bool canProduce { get => _canProduce; set => _canProduce = value; }
+    public ItemDefinition itemDefination { get => _itemDefination; set => _itemDefination = value; }
+
+
 
     /// <summary>
     /// Creates a copy if this scriptable object
@@ -53,6 +71,7 @@ public class ItemDefinition : ScriptableObject, IProductionItem
     public IProductionItem CreateInstance()
     {
         var clone = ScriptableObject.Instantiate(this);
+      
         clone.name = clone.name.Substring(0, clone.name.Length - 7); // Remove (Clone) from name
         return clone;
     }

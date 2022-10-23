@@ -118,6 +118,8 @@ public class GridManager : IGridManager
     /// <inheritdoc />
     public Action<IProductionItem> onItemAdded { get; set; }
 
+
+    public Action<IProductionItem> onItemSelected { get; set; }
     /// <inheritdoc />
     public Action<IProductionItem> onItemAddedFailed { get; set; }
 
@@ -327,7 +329,7 @@ public class GridManager : IGridManager
     /* 
      * Returns true if given items physically fits within this inventory
      */
-    private bool DoesItemFit(IProductionItem item) => item.width <= width && item.height <= height;
+    private bool DoesItemFit(IProductionItem item) => item !=null && item.width <= width && item.height <= height; 
 
     /*
      * Returns the center post position for a given item within this inventory
