@@ -8,7 +8,7 @@ public class ItemDefinition : ScriptableObject, IProductionItem
 {
     [SerializeField] private Sprite _sprite = null;
     [SerializeField] private GridShape _shape = null;
-    [SerializeField] private ItemType _type = ItemType.Utility;
+    [SerializeField] private ItemType _type = ItemType.Unit;
     [SerializeField] private bool _canDrop = true;
     [SerializeField, HideInInspector] private Vector2Int _position = Vector2Int.zero;
 

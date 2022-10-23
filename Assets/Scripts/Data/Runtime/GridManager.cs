@@ -241,7 +241,7 @@ public class GridManager : IGridManager
                 item.position = point;
                 break;
             default:
-                throw new NotImplementedException($"InventoryRenderMode.{_provider.gridRenderMode.ToString()} have not yet been implemented");
+                throw new NotImplementedException($"GridRenderMode.{_provider.gridRenderMode.ToString()} have not yet been implemented");
         }
         Rebuild(true);
         onItemAdded?.Invoke(item);

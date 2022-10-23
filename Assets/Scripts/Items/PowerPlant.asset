@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba2b4281d809cc4e9fc542c4bd3609d, type: 3}
+  m_Name: PowerPlant
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 21300000, guid: f898dbccbd24b9f408aab01a8f34c72f, type: 3}
+  _shape:
+    _width: 3
+    _height: 3
+    _shape: 010101010101010101
+  _type: 1
+  _canDrop: 1
+  _position: {x: 0, y: 0}

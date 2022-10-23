@@ -2,6 +2,6 @@
 public enum ItemType
 {
     Any,
-    Weapons,
-    Utility,
+    Building,
+    Unit,
 }
