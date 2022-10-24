@@ -52,6 +52,7 @@ public class SizeGridCreator : MonoBehaviour
         // Log items being dropped on the ground
         inventory.onItemDropped += (item) =>
         {
+            inventory.TryAdd(_definitions[0].CreateInstance());
             GetComponent<GridRenderer>().SetInventory(inventory, provider.gridRenderMode);
             Debug.Log((item as ItemDefinition).Name + " was dropped on the ground");
         };
